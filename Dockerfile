@@ -28,8 +28,8 @@ RUN curl https://static.rust-lang.org/rustup.sh | sh -s -- \
   echo "[build]\ntarget = \"x86_64-unknown-linux-musl\"" > /.cargo/config
 
 # Compile C libraries with musl-gcc
-ENV SSL_VER=1.0.2j \
-    CURL_VER=7.52.1 \
+ENV SSL_VER=1.0.2k \
+    CURL_VER=7.54.0 \
     CC=musl-gcc \
     PREFIX=/usr/local \
     PATH=/usr/local/bin:$PATH \
