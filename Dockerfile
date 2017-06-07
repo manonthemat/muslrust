@@ -1,5 +1,5 @@
 FROM ubuntu:xenial
-MAINTAINER Eirik Albrigtsen <analsandblaster@gmail.com>
+# forked from https://github.com/clux/muslrust, because nighlty builds weren't happening any longer
 
 RUN apt-get update && apt-get install -y \
   cmake \
