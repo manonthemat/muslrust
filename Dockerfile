@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
   make \
   nano \
   ca-certificates \
+  openssh-client \
   xz-utils \
   musl-tools \
   pkg-config \
