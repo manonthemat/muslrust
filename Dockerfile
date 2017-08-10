@@ -4,6 +4,9 @@ FROM ubuntu:xenial
 RUN apt-get update && apt-get install -y \
   cmake \
   curl \
+  apt-transport-https \
+  software-properties-common \
+  python-software-properties \
   file \
   git \
   g++ \
@@ -60,3 +63,11 @@ ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
     OPENSSL_INCLUDE_DIR=$PREFIX/include \
     OPENSSL_DIR=$PREFIX \
     OPENSSL_STATIC=1
+
+# Install Docker
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable" && \
+    apt-get update && \
+    apt-cache policy docker-ce && \
+    apt-get install -y docker-ce
+
