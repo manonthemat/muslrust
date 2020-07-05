@@ -1,7 +1,8 @@
 [package]
 authors = ["clux <sszynrae@gmail.com>"]
-name = "sslcrate"
+name = "dieselpgcrate"
 version = "0.1.0"
 
 [dependencies]
+diesel = { version = "1.4.*", features = ["postgres"] }
 openssl = "*"

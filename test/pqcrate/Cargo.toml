@@ -1,7 +1,8 @@
 [package]
 authors = ["clux <sszynrae@gmail.com>"]
-name = "curlcrate"
+name = "pqcrate"
 version = "0.1.0"
 
 [dependencies]
-curl = "*"
+pq-sys = "0.4.5"
+openssl = "*"

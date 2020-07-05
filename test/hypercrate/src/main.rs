@@ -1,29 +1,16 @@
+extern crate futures;
 extern crate hyper;
+extern crate tokio_core;
 extern crate hyper_openssl;
 
-use std::process;
-use std::io::Read;
 use std::env;
+use std::io::{self, Write};
+
+use futures::Future;
+use futures::stream::Stream;
+
 use hyper::Client;
-
-use hyper::net::HttpsConnector;
-use hyper_openssl::OpensslClient;
-
-// simple request body fetcher
-fn hyper_req(url: &str) -> String {
-    let ssl = OpensslClient::new().unwrap();
-    let connector = HttpsConnector::new(ssl);
-    let client = Client::with_connector(connector);
-
-    let mut res = client.get(url).send().unwrap();
-    if res.status != hyper::Ok {
-        println!("Failed to fetch url {}", url);
-        process::exit(1);
-    }
-    let mut body = String::new();
-    res.read_to_string(&mut body).unwrap();
-    body
-}
+use hyper_openssl::HttpsConnector;
 
 fn main() {
     // set SSL_CERT location - see issue #5
@@ -31,11 +18,23 @@ fn main() {
     // but for plain bin distribution and this test, we set it here
     env::set_var("SSL_CERT_FILE", "/etc/ssl/certs/ca-certificates.crt");
 
-    let url = "https://raw.githubusercontent.com/clux/muslrust/master/test/curlcrate/src/main.rs";
+    let url = "https://raw.githubusercontent.com/clux/muslrust/master/README.md";
+    let url = url.parse::<hyper::Uri>().unwrap();
 
-    // this only works with correct cert evar
-    let _ = hyper_req(url);
-    println!("HTTPS request succeeeded");
+    let mut core = tokio_core::reactor::Core::new().unwrap();
 
-    process::exit(0);
+    let client = Client::configure()
+        .connector(HttpsConnector::new(4, &core.handle()).unwrap())
+        .build(&core.handle());
+
+    let work = client.get(url).and_then(|res| {
+        println!("Response: {}", res.status());
+        assert!(res.status().is_success());
+
+        res.body().for_each(|chunk| {
+            io::stdout().write_all(&chunk).map_err(From::from)
+        })
+    });
+
+    core.run(work).unwrap();
 }

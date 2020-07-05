@@ -11,12 +11,12 @@ fn decompress(tarpath: PathBuf, extract_path: PathBuf) -> io::Result<()> {
     use flate2::read::GzDecoder;
     use tar::Archive;
 
-    let tarball = try!(fs::File::open(tarpath));
-    let decompressed = try!(GzDecoder::new(tarball));
+    let tarball = fs::File::open(tarpath)?;
+    let decompressed = GzDecoder::new(tarball);
     let mut archive = Archive::new(decompressed);
 
-    try!(fs::create_dir_all(&extract_path));
-    try!(archive.unpack(&extract_path));
+    fs::create_dir_all(&extract_path)?;
+    archive.unpack(&extract_path)?;
 
     Ok(())
 }
@@ -26,11 +26,11 @@ fn compress(input_file: &str, output_file: PathBuf) -> io::Result<()> {
     use flate2::Compression;
     use tar::Builder;
 
-    let file = try!(File::create(&output_file));
-    let mut encoder = GzEncoder::new(file, Compression::Default);
+    let file = File::create(&output_file)?;
+    let mut encoder = GzEncoder::new(file, Compression::default());
     let mut builder = Builder::new(&mut encoder);
 
-    try!(builder.append_path(input_file));
+    builder.append_path(input_file)?;
 
     // scope Drop's builder, then encoder
     Ok(())
