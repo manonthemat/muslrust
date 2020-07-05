@@ -2,24 +2,30 @@ FROM ubuntu:xenial
 # forked from https://github.com/clux/muslrust, because nighlty builds weren't happening any longer
 
 RUN apt-get update && apt-get install -y \
+  apt-file \
+  apt-transport-https \
+  build-essential \
+  brotli \
+  ca-certificates \
+  clang \
   cmake \
   curl \
-  apt-transport-https \
-  software-properties-common \
-  python-software-properties \
   file \
   git \
   g++ \
-  python \
+  libclang-dev \
+  libssl-dev \
+  libpq-dev \
+  llvm-dev \
   make \
-  nano \
-  ca-certificates \
-  openssh-client \
-  xz-utils \
   musl-tools \
+  openssh-client \
   pkg-config \
-  apt-file \
+  python \
+  python-software-properties \
+  software-properties-common \
   xutils-dev \
+  xz-utils \
   --no-install-recommends && \
   rm -rf /var/lib/apt/lists/*
 
