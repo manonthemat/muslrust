@@ -13,7 +13,7 @@ FROM ubuntu:xenial
 # recently removed:
 # cmake (not used), nano, zlib1g-dev
 RUN apt-get update && apt-get install -y \
-
+  clang llvm-dev libclang-dev libssl-dev pkg-config libpq-dev brotli \
   musl-dev \
   musl-tools \
   file \
